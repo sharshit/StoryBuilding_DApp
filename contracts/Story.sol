@@ -49,17 +49,23 @@ contract Story {
     {
 
         uint roundPropose  = 0;
+        uint flag = 0;
         for (uint i =0;i<5;i++)
         {
             if(arrayOfLines[i].voteCount > arrayOfLines[roundPropose].voteCount)
             {
                 roundPropose = i;
             }
+            if(arrayOfLines[roundPropose].voteCount > 0){
+                flag = 1;
+            }
             arrayOfLines[i].voteCount = 0;
         }
-        finalStory[lineCount] = arrayOfLines[roundPropose].line;
-        lineCount ++;
-        lineselected = arrayOfLines[roundPropose].line;
+        if(flag==1){
+            finalStory[lineCount] = arrayOfLines[roundPropose].line;
+            lineCount ++;
+            lineselected = arrayOfLines[roundPropose].line;   
+        }
     }
 
 

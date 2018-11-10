@@ -32,7 +32,7 @@ App = {
       console.log(App)
       // Connect provider to interact with contract
       App.contracts.Story.setProvider(App.web3Provider);
-
+      App.TimeOut();
       return App.render();
     }
     );
@@ -76,7 +76,6 @@ App = {
       }
       // loader.hide();
       // content.show();
-      return App.TimeOut();
     }).catch(function(error) {
       console.warn(error);
     });
@@ -102,13 +101,33 @@ App = {
   {
     // var candidateId = $('#candidatesSelect').val();
     // console.log(candidateId)
-    App.contracts.Story.deployed().then(async function(instance) {
+    App.contracts.Story.deployed().then(function(instance) {
       // return instance.casteVote(candidateId, { from: App.account });
-      await instance.addStoryLine()
-      return instance.lineselected();
+      return instance.addStoryLine()
+      // return instance.lineselected();
     }).then(function(result) {
       // Wait for votes to update
-      console.log("Line to be added",result)
+      // console.log("Line to be added",result)
+      var story = $("#finalStory");
+      story.empty();
+      storyInstance.lineCount().then(function(num_lines){
+      // console.log("Number of lines",num_lines)
+      for (let i = 0; i < num_lines; i++) {
+        storyInstance.finalStory(i).then(function(line){
+          // var tline = line[0];
+          // var voteCount = line[1];
+          console.log("finalStory lines",line)
+
+          // Render candidate Result
+          var lineTemplate = "<li>" + line + "</li>";
+          story.append("<ul>"+lineTemplate+"</ul>");
+
+        //   // Render candidate ballot option
+        // var candidateOption = "<option value='" + i + "' >" + tline + "</ option>"
+        // candidatesSelect.append(candidateOption);
+        });
+      }
+    })
       App.render()
     }).catch(function(err) {
       console.error(err);
@@ -152,12 +171,13 @@ TimeOut : function()
       storyInstance = instance
   }).then(function(){
       storyInstance.start().then(function(result){
-        setTimeout(async function(){
+        setTimeout(function()
+        {
           console.log("Time:",Math.floor(Date.now()/1000)-(result))
-          await App.endRound()
-          await App.showStory()
-          await App.TimeOut()
-        }, 50000)
+          App.endRound()
+          // App.showStory()
+          App.TimeOut()
+        }, 50000 )
       })
   });
 
