@@ -15,7 +15,7 @@ contract Story {
     string[100]public  finalStory;     // final lines in story
     uint public lineCount = 0;         // final story line count
     string public lineselected;
-
+    uint public start; 
     mapping( address => uint) votedInThisRound;
 
  
@@ -29,6 +29,7 @@ contract Story {
         arrayOfLines[2].line = "Line 2 "; arrayOfLines[2].voteCount = 0;
         arrayOfLines[3].line = "Line 3 "; arrayOfLines[3].voteCount = 0;
         arrayOfLines[4].line = "Line 4 "; arrayOfLines[4].voteCount = 0;
+        start = now ;
     }
 
     modifier notVoted()

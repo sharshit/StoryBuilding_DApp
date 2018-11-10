@@ -76,6 +76,7 @@ App = {
       }
       // loader.hide();
       // content.show();
+      return App.TimeOut();
     }).catch(function(error) {
       console.warn(error);
     });
@@ -142,10 +143,33 @@ App = {
       }
       })
   });
+},
+
+
+TimeOut : function()
+{
+  App.contracts.Story.deployed().then(function(instance) {
+      storyInstance = instance
+  }).then(function(){
+      storyInstance.start().then(function(result){
+        setTimeout(async function(){
+          console.log("Time:",Math.floor(Date.now()/1000)-(result))
+          await App.endRound()
+          await App.showStory()
+          await App.TimeOut()
+        }, 50000)
+      })
+  });
+
 }
+
+
+
 }
 $(function() {
-  $(window).load(function() {
-    App.init();
+  $(window).load(async function() {
+    await App.init()
+    // console.log(App)
+    // await App.TimeOut()
   });
 });
