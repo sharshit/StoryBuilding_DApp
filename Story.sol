@@ -11,7 +11,7 @@ contract Story {
         uint voteCount;
     }
 
-    storyLine[11] arrayOfLines; // keep track of status of lines in each round
+    storyLine[11] public arrayOfLines; // keep track of status of lines in each round
     string[100] finalStory;     // final lines in story
     uint lineCount = 0;         // final story line count
 
@@ -25,9 +25,9 @@ contract Story {
         
         arrayOfLines[0].line = "Line 0"; arrayOfLines[0].voteCount = 0;
         arrayOfLines[1].line = "Line 1"; arrayOfLines[1].voteCount = 0; 
-        arrayOfLines[2].line = "Line 2"; arrayOfLines[2].voteCount = 0;
+        arrayOfLines[2].line = "Line 2"; arrayOfLines[2].voteCount = 3;
         arrayOfLines[3].line = "Line 3"; arrayOfLines[3].voteCount = 0;
-        arrayOfLines[4].line = "Line 0"; arrayOfLines[4].voteCount = 0;
+        arrayOfLines[4].line = "Line 4"; arrayOfLines[4].voteCount = 0;
     }
 
     modifier notVoted()
@@ -36,11 +36,11 @@ contract Story {
     }
 
 
-    function lineVoteCount(uint idx)
-    notVoted
+    function casteVote(uint idx) public
     {
-        votedInThisRound[msg.sender] = 1;
-        arrayOfLines[idx].voteCount += 1;        	
+        //votedInThisRound[msg.sender] = 1;
+
+        arrayOfLines[idx].line = "Voted";        	
         
     }
 
@@ -60,6 +60,7 @@ contract Story {
 
     }
 
+    
     function showStory() public
     {
 
