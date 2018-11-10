@@ -35,18 +35,15 @@ App = {
 
       return App.render();
     }
-    )
-;
+    );
   },
 
   render: function() {
     var storyInstance;
     // var loader = $("#loader");
     // var content = $("#content");
-
     // loader.show();
     // content.hide();
-
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -62,28 +59,20 @@ App = {
     }).then(function( storyInstance ) {
       var story = $("#Story");
       story.empty();
-
       var candidatesSelect = $('#candidatesSelect');
-    candidatesSelect.empty();
-
+      candidatesSelect.empty();
       for (let i = 0; i <= 4; i++) {
-        
         storyInstance.arrayOfLines(i).then(function(line) {
           var tline = line[0];
           var voteCount = line[1];
           console.log(line)
-
           // Render candidate Result
           var candidateTemplate = "<tr><th>" + tline + "</td><td>" + voteCount + "</td></tr> "
           story.append(candidateTemplate);
-
         //   // Render candidate ballot option
         var candidateOption = "<option value='" + i + "' >" + tline + "</ option>"
         candidatesSelect.append(candidateOption);
-
-
         });
-
       }
       // loader.hide();
       // content.show();
@@ -92,8 +81,8 @@ App = {
     });
   },
 
-
-  castVote: function() {
+  castVote: function() 
+  {
     var candidateId = $('#candidatesSelect').val();
     console.log(candidateId)
     App.contracts.Story.deployed().then(function(instance) {
@@ -105,17 +94,56 @@ App = {
     }).catch(function(err) {
       console.error(err);
     });
-  }
+  },
 
 
+  endRound: function() 
+  {
+    // var candidateId = $('#candidatesSelect').val();
+    // console.log(candidateId)
+    App.contracts.Story.deployed().then(async function(instance) {
+      // return instance.casteVote(candidateId, { from: App.account });
+      await instance.addStoryLine()
+      return instance.lineselected();
+    }).then(function(result) {
+      // Wait for votes to update
+      console.log("Line to be added",result)
+      App.render()
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
 
+  showStory: function()
+  {
+    // Needs to update this
+    App.contracts.Story.deployed().then(function(instance) {
+      storyInstance = instance;
+      return storyInstance;
+    }).then(function( storyInstance ) {
+      var story = $("#finalStory");
+      story.empty();
+      storyInstance.lineCount().then(function(num_lines){
+      console.log("Number of lines",num_lines)
+      for (let i = 0; i < num_lines; i++) {
+        storyInstance.finalStory(i).then(function(line){
+          // var tline = line[0];
+          // var voteCount = line[1];
+          console.log("finalStory lines",line)
 
+          // Render candidate Result
+          var lineTemplate = "<li>" + line + "</li>";
+          story.append("<ul>"+lineTemplate+"</ul>");
 
-
-
-
-};
-
+        //   // Render candidate ballot option
+        // var candidateOption = "<option value='" + i + "' >" + tline + "</ option>"
+        // candidatesSelect.append(candidateOption);
+        });
+      }
+      })
+  });
+}
+}
 $(function() {
   $(window).load(function() {
     App.init();

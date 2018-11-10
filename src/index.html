@@ -16,12 +16,13 @@
           <h1 class="text-center">Story Building</h1>
           <hr/>
           <br/>
-          
+          <div id="finalStory">
+            
+          </div>
           <div id="content" >
             <table class="table">
               <thead>
                 <tr>
-                  
                   <th scope="col">Line</th>
                   <th scope="col">Votes</th>
                   <form onSubmit="App.castVote(); return false;">
@@ -33,12 +34,17 @@
                     <button type="submit" class="btn btn-primary">Vote</button>
                     <hr />
                   </form>
-
                 </tr>
               </thead>
               <tbody id="Story">
               </tbody>
             </table>
+
+
+            <button type="submit" class="btn btn-primary" onClick = "App.endRound(); return false;" >End Round</button>
+            <button type="submit" class="btn btn-primary" onClick = "App.showStory(); return false;" >Show Story</button>
+            
+
             <hr/>
             <p id="accountAddress" class="text-center"></p>
           </div>
